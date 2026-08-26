@@ -10,6 +10,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { connectDB } from './lib/db.js';
+import job from './lib/cron.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -41,4 +42,8 @@ if (fs.existsSync(publicDirPath)) {
 app.listen(PORT, () => {
   connectDB(); // Call the connectDB function to establish a database connection
   console.log('Server is running on port:', PORT);
+
+  if (process.env.NODE_ENV === 'production') {
+    job.start(); // Start the cron job when the server starts
+  }
 });
