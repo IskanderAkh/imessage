@@ -18,10 +18,11 @@ const FRONTEND_URL = process.env.FRONTEND_URL;
 const publicDirPath = path.join(process.cwd(), 'public');
 
 const CORS_OPTIONS = {
-  origin: FRONTEND_URL
+  origin: FRONTEND_URL,
+  credentials: true
 };
 app.use(express.json());
-app.use(cors(CORS_OPTIONS, credentials = true));
+app.use(cors(CORS_OPTIONS));
 app.use(clerkMiddleware());
 
 
@@ -32,7 +33,7 @@ app.get("/health", (req, res) => {
 if (fs.existsSync(publicDirPath)) {
   app.use(express.static(publicDirPath));
 
-  app.get("/{*any}", (req, res) => {
+  app.get("/{*any}", (req, res, next) => {
     res.sendFile(path.join(publicDirPath, 'index.html'), (err) => next(err));
   });
 }
