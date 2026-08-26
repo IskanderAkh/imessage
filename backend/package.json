@@ -11,6 +11,7 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@clerk/express": "^2.1.63",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "expres": "^0.0.5",
