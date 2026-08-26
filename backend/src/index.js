@@ -5,11 +5,18 @@ import cors from 'cors';
 
 import express from 'express';
 import "dotenv/config";
+
+import fs from 'fs';
+import path from 'path';
+
 import { connectDB } from './lib/db.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const FRONTEND_URL = process.env.FRONTEND_URL;
+
+const publicDirPath = path.join(process.cwd(), 'public');
+
 const CORS_OPTIONS = {
   origin: FRONTEND_URL
 };
@@ -22,6 +29,13 @@ app.get("/health", (req, res) => {
 
   res.status(200).json({ message: "Server is healthy" });
 });
+if (fs.existsSync(publicDirPath)) {
+  app.use(express.static(publicDirPath));
+
+  app.get("/{*any}", (req, res) => {
+    res.sendFile(path.join(publicDirPath, 'index.html'), (err) => next(err));
+  });
+}
 
 app.listen(PORT, () => {
   connectDB(); // Call the connectDB function to establish a database connection
