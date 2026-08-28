@@ -1,6 +1,6 @@
 import dns from 'dns';
 dns.setServers(['8.8.8.8', '8.8.4.4']);
-import { clerkMiddleware } from '@clerk/express'
+import { clerkMiddleware, clerkWebhook } from '@clerk/express'
 import cors from 'cors';
 
 import express from 'express';
@@ -11,6 +11,7 @@ import path from 'path';
 
 import { connectDB } from './lib/db.js';
 import job from './lib/cron.js';
+import clerkWebhook from './webhooks/clerk.webhooks.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -22,6 +23,8 @@ const CORS_OPTIONS = {
   origin: FRONTEND_URL,
   credentials: true
 };
+app.use("/api/webhooks/clerk", express.raw({ type: "application/json" }), clerkWebhook);
+
 app.use(express.json());
 app.use(cors(CORS_OPTIONS));
 app.use(clerkMiddleware());
