@@ -1,6 +1,6 @@
 import dns from 'dns';
 dns.setServers(['8.8.8.8', '8.8.4.4']);
-import { clerkMiddleware, clerkWebhook } from '@clerk/express'
+import { clerkMiddleware } from '@clerk/express'
 import cors from 'cors';
 
 import express from 'express';
