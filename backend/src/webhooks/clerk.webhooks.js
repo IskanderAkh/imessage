@@ -59,3 +59,5 @@ router.post("/", async (req, res) => {
         return res.status(500).json({ error: "Clerk verification failed" });
     }
 });
+
+export default router;
