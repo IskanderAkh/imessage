@@ -25,9 +25,10 @@ router.post("/", async (req, res) => {
             const u = evt.data;
 
             const email =
-                u.emailAddresses?.find((e) => e.id === u.primary_email_address_id)?.email_address ?? u.emailAddresses?.[0]?.email_address;
+                u.email_addresses?.find((e) => e.id === u.primary_email_address_id)?.email_address
+                ?? u.email_addresses?.[0]?.email_address;
 
-            const fullName = [u.firstName, u.lastName].filter(Boolean).join(" ") ||
+            const fullName = [u.first_name, u.last_name].filter(Boolean).join(" ") ||
                 u.username || email?.split("@")[0];
 
             await User.findOneAndUpdate(
@@ -39,10 +40,8 @@ router.post("/", async (req, res) => {
                     username: u.username,
                     profilePic: u.image_url,
                 },
-                { upsert: true, new: true, setDefaultsOnInsert: true }
+                { upsert: true, new: true, setDefaultsOnInsert: true, runValidators: true }
             );
-
-
         }
 
         if (evt.type === "user.deleted") {
