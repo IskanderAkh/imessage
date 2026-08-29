@@ -12,6 +12,8 @@ import path from 'path';
 import { connectDB } from './lib/db.js';
 import job from './lib/cron.js';
 import clerkWebhook from './webhooks/clerk.webhooks.js';
+import authRoutes from './routes/auth.route.js';
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -31,9 +33,11 @@ app.use(clerkMiddleware());
 
 
 app.get("/health", (req, res) => {
-
   res.status(200).json({ message: "Server is healthy" });
 });
+
+app.use("/api/auth", authRoutes)
+
 if (fs.existsSync(publicDirPath)) {
   app.use(express.static(publicDirPath));
 
